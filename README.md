@@ -1,5 +1,4 @@
 # Scripts for manuscript entitled:_"Local and geographic factors shape the occupancy-frequency distribution of freshwater bacteria"_
-###### DOI: https://doi.org/10.1016/j.mimet.2019.02.005
 
 ## Contact
 Erick Mateus-Barros: erickmbarros@gmail.com  
