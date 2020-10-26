@@ -2,6 +2,67 @@
 ##This script was cordially provided by Markus Lindh
 ##Reference DOI: 10.1111/1462-2920.13650
 
+library(vegan)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggExtra)
+
+bimodal=read.table(file = "C:/The/way/to/your/data/otu_table_cleared_rarefied.txt", header=TRUE, sep="\t", dec=".", na.strings="NA")
+bimodal=bimodal[,-1]
+
+x=t(bimodal)
+x[which(x > 0)] = 1
+
+a=
+print(ggplot(data=data.frame(apply(x, 1, sum)[which(apply(x, 2, sum) >0)]),aes(x=data.frame(apply(x, 2, sum)[which(apply(x, 2, sum) >0)])[,1]))+
+        geom_histogram(fill="grey80",colour="black",binwidth=1)+
+        ylim(c(0,ncol(x)))+
+        ylab(paste("Frequency","(Number of OTUs)",sep="\n"))+
+        xlab(paste("Occupancy","(Number of sites occupied)",sep="\n"))+
+        ggtitle("")+
+        coord_cartesian(ylim = c(0,120))+
+        theme_bw())
+
+
+table.out=as.data.frame(table(apply(x, 2, sum)[which(apply(x, 2, sum) >0)]))
+colnames(table.out)= c("Occupancy","Frequency")
+print(table.out)
+#(ratio=(table.out[nrow(table.out),2])/(table.out[1,2]))
+write.table(table.out,file=paste("bimodal.txt",sep="_"),sep="\t",row.names=F)
+
+
+#test.input=as.data.frame(table(apply(x, 2, sum)[which(apply(x, 2, sum) >0)]))
+MOS.test=MOStest(as.numeric(table.out[,1]), 
+                 as.numeric(table.out[,2]),
+                 family=gaussian(link = "log"), 
+                 maxit = 100)
+print(MOS.test)
+capture.output(MOS.test,file=paste("MOStest.txt",sep="_")) #Saves table with stats
+
+
+otus=read.table(file = "C:/The/way/to/your/data/otu_table_cleared_rarefied.txt", header=TRUE,row.names = 1, sep="\t", dec=".", na.strings="NA")
+otus.ra <- otus/colSums(otus)
+otus.ra[,61] <- rowMeans(otus.ra)
+otus.ra[,62] <- rowSums(otus.ra[1:60] > 0)
+otus.ra <- otus.ra[61:62]
+colnames(otus.ra)= c("ab","occ")
+
+b=
+ggplot(otus.ra,aes(x=occ, y=ab))+
+  geom_jitter()+
+  ylab(paste("Mean Abundance (%)"))+
+  xlab(paste("Occupancy","(Number of sites occupied)",sep="\n"))+
+  ggtitle("")+
+  theme_bw()
+
+x = arrangeGrob(a, b,
+                ncol = 2, nrow = 1,
+                layout_matrix = rbind(c(1,2)))
+as_ggplot(x) +
+  draw_plot_label(label = c ("A","B", "*"), size = 15,
+                  x = c(0, 0.5, 0.4655), y = c(1, 1, 0.355))
+
 
 ###SpADs - Spatial Abundance Distributions
 ##This script was cordially provided by Juan Pablo Niño-Garcia and Clara Ruíz-Gonzáléz
