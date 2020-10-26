@@ -1,4 +1,7 @@
-# Scripts for manuscript entitled:_"Local and geographic factors shape the occupancy-frequency distribution of freshwater bacteria"_
+# Scripts for manuscript entitled:_"Local and Geographic Factors Shape the Occupancy-Frequency Distribution of Freshwater Bacteria"_
+###### DOI: https://doi.org/10.1007/s00248-020-01560-3
+
+This article was published by the Microbial Ecology at July, 2020
 
 ## Contact
 Erick Mateus-Barros: erickmbarros@gmail.com  
